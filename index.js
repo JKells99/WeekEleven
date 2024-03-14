@@ -2,12 +2,15 @@ const express = require('express');
 const methodOverride = require('method-override');
 const app = express();
 const PORT = 3000;
+const cors = require('cors');
 
 global.DEBUG = true;
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true, })); // This is important!
-app.use(methodOverride('_method')); // So is this!
+// app.use(methodOverride('_method')); // So is this!
+app.use(express.json());
+app.use(cors())
 
 app.get('/', (req, res) => {
     res.render('index.ejs', { name: 'Cassian Andor'});
@@ -28,6 +31,8 @@ app.use('/users', usersRouter);
 // anything beginning with "/api" will go into this
 const apiRouter = require('./routes/api')
 app.use('/api', apiRouter);
+
+
 
 app.use((req, res) => {
     res.status(404).render('404');

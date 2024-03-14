@@ -1,6 +1,8 @@
 var router = require('express').Router();
 const loginsDal = require('../../services/pg.logins.dal')
 //const actorsDal = require('../../services/m.actors.dal')
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 // api/logins
 router.get('/', async (req, res) => {
@@ -35,11 +37,12 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   if(DEBUG) { 
       console.log('ROUTE: /api/logins/ POST');
-  //    console.log(req);
+     console.log(req.body.username);
   }
   try {
       await loginsDal.addLogin(req.body.username, req.body.password );
       res.statusCode = 201;
+
       res.json({message: "Created", status: 201});
   } catch {
       // log this error to an error log file.
